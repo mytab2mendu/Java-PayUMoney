@@ -74,7 +74,7 @@ public class myServlet extends HttpServlet {
                 + "        </tr>\n"
                 + "\n"
                 + "        <tr>\n"
-                + "          <td colspan=\"3\"><input type=\"hidden\" name=\"service_provider\" value=\"\" /></td>\n"
+                + "          <td colspan=\"3\"><input type=\"hidden\" name=\"service_provider\" value="+values.get("service_provider")+" /></td>\n"
                 + "        </tr>\n"
                 + "             <tr>\n"
                 + "          <td><b>Optional Parameters</b></td>\n"

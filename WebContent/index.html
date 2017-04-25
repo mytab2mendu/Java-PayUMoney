@@ -9,33 +9,35 @@ and open the template in the editor.
     </head>
 
     <body>
-success url test: <a href="./success">success</a>
-fail url test: <a href="./fail">fail</a>
+<!-- success url test: <a href="./success">success</a>
+fail url test: <a href="./fail">fail</a> -->
 
         <h1>PayUForm </h1>
 
         <form action="myServlet"  name="payuform" method=POST >
-            <input type="hidden" name="key" value="gtKFFx" /><!-- VRWBFtB9 gu3gUwmf gtKFFx -->
+            <input type="hidden" name="key" value="" /><!-- gu3gUwmf gtKFFx -->
             <input type="hidden" name="hash_string" value="" />
             <input type="hidden" name="hash" />
-
+			<input type="hidden" name="service_provider" value="payu_paisa" />
             <!-- <input type="hidden" name="txnid" value="txnid11"/> -->
 
             <table>
+            <tr><td>Environment</td><td><input type="radio" name="env" value="secure" />Live
+	 &nbsp; &nbsp;<input type="radio" name="env" value="test" checked="checked" />DEV</td></tr>
                 <tr>
                     <td><b>Mandatory Parameters</b></td>
                 </tr>
                 <tr>
                     <td>Amount: </td>
-                    <td><input name="amount"  /></td>
+                    <td><input name="amount" value="10.00" /></td>
                     <td>First Name: </td>
-                    <td><input name="firstname" id="firstname"  /></td>
+                    <td><input name="firstname" id="firstname" value="shiva" /></td>
                 </tr>
                 <tr>
                     <td>Email: </td>
-                    <td><input name="email" id="email"   /></td>
+                    <td><input name="email" id="email"  value="gani247@gmail.com" /></td>
                     <td>Phone: </td>
-                    <td><input name="phone"  /></td>
+                    <td><input name="phone" value="9703362199" /></td>
                 </tr>
                 <tr>
                     <td>Product Info: </td>
@@ -43,15 +45,15 @@ fail url test: <a href="./fail">fail</a>
                 </tr>
                 <tr>
                     <td>Success URI: </td>
-                    <td colspan="3"><input name="surl"  size="64"  /></td>
+                    <td colspan="3"><input name="surl"  size="64" value="http://localhost:8080/PayUDemo/success" /></td>
                 </tr>
                 <tr>
                     <td>Failure URI: </td>
-                    <td colspan="3"><input name="furl"  size="64" /></td><td colspan="3"><input type="submit" value="Submit"  /></td>
+                    <td colspan="3"><input name="furl" value="http://localhost:8080/PayUDemo/fail" size="64" /></td><td colspan="3"><input type="submit" value="Submit"  /></td>
                 </tr>
 
                 <tr>
-                    <td colspan="3"><input type="hidden" name="service_provider" value="" /></td>
+                    <td colspan="3"><input type="hidden" name="service_provider" value="payu_paisa" /></td>
                 </tr>
                 <tr>
                     <td><b>Optional Parameters</b></td>

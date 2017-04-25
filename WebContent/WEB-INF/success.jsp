@@ -8,7 +8,7 @@
 	<div>
 		<h2>Payment Success</h2>
 	</div>
-
+Goto PayU Money <a href='./'>Home</a>
 	<div>
 		<p>Txn Id: ${param.txnid}</p>
 		<p>status:	${param.status}</p>

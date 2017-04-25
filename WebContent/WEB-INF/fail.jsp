@@ -8,7 +8,7 @@
 	<div>
 		<h2>Payment Failed</h2>
 	</div>
-
+<a href='./'>Retry Here</a>
 	<div>
 		<p>Txn Id: ${param.txnid}</p>
 		<p>status:	${param.status}</p>

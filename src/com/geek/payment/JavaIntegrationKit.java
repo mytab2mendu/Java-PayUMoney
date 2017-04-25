@@ -43,6 +43,7 @@ public class JavaIntegrationKit {
     }
 
     public String hashCal(String type, String str) {
+    	//http://passwordsgenerator.net/sha512-hash-generator/
         byte[] hashseq = str.getBytes();
         StringBuffer sb = new StringBuffer();// method1
         StringBuffer hexString = new StringBuffer();// method2
@@ -57,8 +58,8 @@ public class JavaIntegrationKit {
             	sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             System.out.println("Hex format1 : " + sb.toString());
+            
             //convert the byte to hex format method 2
-          
             for (int i=0;i<mdbytes.length;i++) {
             	hexString.append(Integer.toHexString(0xFF & mdbytes[i]));
             }
@@ -67,41 +68,46 @@ public class JavaIntegrationKit {
         } catch (NoSuchAlgorithmException nsae) {
         }
         return sb.toString();
-        //return hexString.toString();
 
     }
     
-    private static String getHashCodeFromString(String str) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(str.getBytes());
-        byte byteData[] = md.digest();
+    private String getKey(String env){
 
-        //convert the byte to hex format method 1
-        StringBuffer hashCodeBuffer = new StringBuffer();
-        for (int i = 0; i < byteData.length; i++) {
-            hashCodeBuffer.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        return hashCodeBuffer.toString();
+    	if(env.equals("secure")){
+    		return "gu3gUwmf";
+    	}else{
+    		return "gtKFFx";//test
+    	}
     }
-
     
-    public static void main(String...a){
-    	JavaIntegrationKit ji = new JavaIntegrationKit();
-    	//System.out.println(ji.get_SHA_512("gtKFFx|txnid1|10.00|testPro|Ganesh|gani247@gmail.com|||||||||||", "eCwWELxi"));
-    	System.out.println(ji.hashCal("SHA-512", "gtKFFx|txnid1|10.00|testPro|Ganesh|gani247@gmail.com|||||||||||eCwWELxi"));
-    	try{
-    		System.out.println(ji.getHashCodeFromString("gtKFFx|txnid1|10.00|testPro|Ganesh|gani247@gmail.com|||||||||||eCwWELxi"));
-    	} catch (NoSuchAlgorithmException nsae) {
-        }
+    private String getSalt(String env){
+    	if(env.equals("secure")){
+
+    		return "ZcoOKlVupo";
+    	}else{
+    		return "eCwWELxi";//test
+    		
+    	}
+    }
+    
+    private String getBaseURL(String env){
+    	if(env.equals("secure")){
+    		return "https://secure.payu.in";
+    		
+    	}else{
+    		return "https://test.payu.in";//test
+    		
+    	}
     }
 
     protected Map<String, String> hashCalMethod(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String salt = "eCwWELxi";//T7DjifXJuR";//"fE0aTrjr";//ZcoOKlVupo";// eCwWELxi";
+        
         String action1 = "";
-        String base_url = "https://test.payu.in";//secure
-        // base_url = "https://secure.payu.in";//
+        String env = (request.getParameter("env")== null || empty(request.getParameter("env")) ) ? "test" : request.getParameter("env");
+        String base_url = getBaseURL(env);
+        
         error = 0;
         String hashString = "";
         Enumeration paramNames = request.getParameterNames();
@@ -123,13 +129,15 @@ public class JavaIntegrationKit {
         } else {
             txnid = params.get("txnid");
         }
-                
+        if (empty(params.get("key"))) {
+            params.put("key", getKey(env));
+        }        
         
         String hash = "";
         String otherPostParamSeq = "phone|surl|furl|lastname|curl|address1|address2|city|state|country|zipcode|pg";
         String hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
         if (empty(params.get("hash")) && params.size() > 0) {
-            if (empty(params.get("key")) || empty(txnid) || empty(params.get("amount")) || empty(params.get("firstname")) || empty(params.get("email")) || empty(params.get("phone")) || empty(params.get("productinfo")) || empty(params.get("surl")) || empty(params.get("furl"))) {// || empty(params.get("service_provider"))) {
+            if (empty(params.get("key")) || empty(txnid) || empty(params.get("amount")) || empty(params.get("firstname")) || empty(params.get("email")) || empty(params.get("phone")) || empty(params.get("productinfo")) || empty(params.get("surl")) || empty(params.get("furl")) || empty(params.get("service_provider"))) {
                 error = 1;
             } else {
                 
@@ -144,8 +152,10 @@ public class JavaIntegrationKit {
                     }
                     hashString = hashString.concat("|");
                 }
-                //hash = get_SHA_512(hashString,salt);
-                hashString = hashString.concat(salt);
+                if (env.equals("secure")) {
+                	urlParams.put("service_provider", params.get("service_provider"));
+                }
+                hashString = hashString.concat(getSalt(env));
                 hash = hashCal("SHA-512", hashString);
                 
                 System.out.println("hashString : "+hashString);
